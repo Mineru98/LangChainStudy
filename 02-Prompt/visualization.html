@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>물건 위치 및 이동 시간 시각화</title>
+    <style>
+        #network {
+            width: 100%;
+            height: 800px; /* 높이를 늘려 여유 공간 확보 */
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+    <h1>물건 위치 및 이동 시간 시각화</h1>
+    <div id="network"></div>
+
+    <script type="text/javascript">
+        // 노드 데이터
+        var nodes = new vis.DataSet([
+            { id: 'A1', label: 'A1 (대파)' },
+            { id: 'A2', label: 'A2 (양파)' },
+            { id: 'B', label: 'B (계란)' },
+            { id: 'C', label: 'C (콘칩)' },
+            { id: 'D', label: 'D (식빵)' }
+        ]);
+
+        // 엣지 데이터
+        var edges = new vis.DataSet([
+            { from: 'A1', to: 'A2', label: '20초' },
+            { from: 'A1', to: 'B', label: '30초' },
+            { from: 'A1', to: 'C', label: '70초' },
+            { from: 'A1', to: 'D', label: '120초' },
+            { from: 'A2', to: 'A1', label: '20초' },
+            { from: 'A2', to: 'B', label: '30초' },
+            { from: 'A2', to: 'C', label: '70초' },
+            { from: 'A2', to: 'D', label: '120초' },
+            { from: 'B', to: 'A1', label: '80초' },
+            { from: 'B', to: 'A2', label: '80초' },
+            { from: 'B', to: 'C', label: '30초' },
+            { from: 'B', to: 'D', label: '90초' },
+            { from: 'C', to: 'A1', label: '100초' },
+            { from: 'C', to: 'A2', label: '100초' },
+            { from: 'C', to: 'B', label: '80초' },
+            { from: 'C', to: 'D', label: '30초' },
+            { from: 'D', to: 'A1', label: '120초' },
+            { from: 'D', to: 'A2', label: '120초' },
+            { from: 'D', to: 'B', label: '90초' },
+            { from: 'D', to: 'C', label: '80초' }
+        ]);
+
+        // 네트워크 그래프 옵션
+        var options = {
+            physics: {
+                enabled: true, // 물리 시뮬레이션 활성화
+                barnesHut: {
+                    gravitationalConstant: -2000, // 노드 간 반발력 증가
+                    centralGravity: 0.3, // 중심으로 끌리는 힘 조정
+                    springLength: 200, // 노드 간 기본 거리 증가
+                    springConstant: 0.04, // 스프링 강도 조정
+                    damping: 0.09 // 감쇠율 조정
+                }
+            },
+            edges: {
+                arrows: {
+                    to: { enabled: true, scaleFactor: 0.5 }
+                },
+                font: {
+                    size: 12,
+                    color: '#000',
+                    strokeWidth: 2, // 글자 배경 추가
+                    strokeColor: '#fff' // 글자 배경 색상
+                },
+                smooth: {
+                    type: 'dynamic', // 엣지 곡선 조정
+                    roundness: 0.5 // 곡선 정도
+                },
+                length: 300 // 엣지 길이 조정
+            },
+            nodes: {
+                shape: 'box',
+                font: {
+                    size: 14,
+                    color: '#000'
+                },
+                margin: 20 // 노드 간 여백 추가
+            },
+            layout: {
+                improvedLayout: true // 레이아웃 최적화
+            }
+        };
+
+        // 네트워크 그래프 생성
+        var container = document.getElementById('network');
+        var data = {
+            nodes: nodes,
+            edges: edges
+        };
+        var network = new vis.Network(container, data, options);
+    </script>
+</body>
+</html>
